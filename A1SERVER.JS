@@ -29,32 +29,39 @@ akn.post("/R1", async (req, res) => {
         console.log("Password:", hpass);
         console.log("City:", cityy);
 
-        res.status(200).send("Data received successfully");
 
-        connetion.query(`insert into Users(username,hpass,city)values("${user}","${hpass}","${cityy}")`,
-            (err)=>{
+        const sql = `
+            INSERT INTO Users(username,hpass,city)
+            VALUES(?,?,?)
+        `;
+
+        connetion.query(
+            sql,
+            [user, hpass, cityy],
+            (err, result) => {
+
                 if(err){
                     console.log(err);
+                    return res.status(500).send("Database error");
                 }
-                else{
-                    console.log("siperr");
-                }
+
+                console.log("Inserted successfully");
+
+                res.status(200).send("Registered successfully");
             }
-        )
-    } catch (err) {
+        );
+
+
+    } catch(err){
 
         console.log(err);
-        res.status(500).send("error");
+        res.status(500).send("Server error");
 
     }
 
 });
 
 
-//SERVER ROUTE
-akn.listen(4000, () => {
-    console.log("Server running on port 4000");
-});
 
 //LOGIN PAGE ROUTE
 akn.post("/L1", (req, res) => {
@@ -273,3 +280,8 @@ akn.get("/", (req, res) => {
 });
 
 
+
+//SERVER ROUTE
+akn.listen(4000, () => {
+    console.log("Server running on port 4000");
+});
