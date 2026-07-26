@@ -125,7 +125,7 @@ if(!title || !des || !uid){
     return res.status(400)
     .send("Missing data");
 }
- connection.query(
+ connetion.query(
         "INSERT INTO cfeed (uid, ctitle, cdes) VALUES (?, ?, ?)",
         [uid, title, des],
         (err,result)=>{
