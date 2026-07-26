@@ -126,7 +126,7 @@ if(!title || !des || !uid){
     .send("Missing data");
 }
  connetion.query(
-        "INSERT INTO cfeed (uid, ctitle, cdes) VALUES (?, ?, ?)",
+        "INSERT INTO Cfeed (uid, ctitle, cdes) VALUES (?, ?, ?)",
         [uid, title, des],
         (err,result)=>{
 
