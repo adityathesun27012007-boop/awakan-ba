@@ -120,7 +120,6 @@ let uid=req.body.p3;
 console.log(title);
 console.log(des);
 console.log(uid);
-res.send("got it");
 if(!title || !des || !uid){
     return res.status(400)
     .send("Missing data");
