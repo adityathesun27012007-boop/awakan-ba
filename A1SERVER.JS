@@ -7,7 +7,9 @@ const multer=require("multer");
 require("dotenv").config();
 const akn = express();
 
-akn.use(cors());
+akn.use(cors({
+    origin:"https://awakan.vercel.app"
+}));
 akn.use(express.json());
 const upload=multer({
 
