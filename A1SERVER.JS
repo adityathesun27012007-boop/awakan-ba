@@ -121,11 +121,26 @@ console.log(title);
 console.log(des);
 console.log(uid);
 res.send("got it");
-connetion.query(`insert into Cfeed(uid,ctitle,cdes)values("${uid}","${title}","${des}")`,async(err)=>{
-if (err){
-    console.log(err);
+if(!title || !des || !uid){
+    return res.status(400)
+    .send("Missing data");
 }
-})})
+ connection.query(
+        "INSERT INTO cfeed (uid, ctitle, cdes) VALUES (?, ?, ?)",
+        [uid, title, des],
+        (err,result)=>{
+
+            if(err){
+                console.log(err);
+                return res.status(500).send(err);
+            }
+
+            res.send("got it");
+
+        }
+    );
+
+});
 //CSNAPS PAGE ROUTE
 akn.post("/CS",upload.single("imageinput"),async(req,res)=>{
     
@@ -141,18 +156,47 @@ console.log(req.file);
 
 console.log(ct);
 console.log(cd);
+if(!req.file){
 
+    return res.status(400)
+    .send("Image required");
 
-connetion.query(`insert into CSnaps(uid,ctitle,cdes,iname,img)values("${uid}","${ct}","${cd}",?,?)`,[iname, img],
-    (err,resp)=>{
-if(err){
-return res.status(500).send("errpr");
 }
-res.send("got it");
-    }
+if(!ct || !cd || !uid){
+    return res.status(400)
+    .send("Missing fields");
+}
+const sql=
+`
+INSERT INTO CSnaps
+(uid,ctitle,cdes,iname,img)
+VALUES(?,?,?,?,?)
+`;
+connetion.query(
+sql,
+[
+uid,
+ct,
+cd,
+iname,
+img
+],
 
-)    
-})
+(err,result)=>{
+
+
+if(err){
+
+console.log(err);
+
+return res.status(500)
+.send("Database error");
+}
+res.send("Snap uploaded");
+
+
+});   
+});
 /*DATABASE CONNECTION
 const connetion=mysql.createConnection({
     host:"localhost",
